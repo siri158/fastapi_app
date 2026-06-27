@@ -1,12 +1,13 @@
-from sqlalchemy import ColumnInteger, String,Enum,relationship
-from database import engine, Base,sessionLocal
+from database import Base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
-
-class CompanyBase(Base):
-    __tablename__ = 'companies'
+class Company(Base):
+    __tablename__ = "companies"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String,  index=True, nullable=False)
+    name = Column(String, index=True, nullable=False)
     email = Column(String, unique=True)
     phone = Column(String, unique=True)
-    jobs = relationship("JobBase", back_populates="company")
+
+    jobs = relationship("Job", back_populates="company")
