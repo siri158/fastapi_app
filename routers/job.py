@@ -1,13 +1,16 @@
-from fastapi import APIRouter
-from schemas.job import JobCreate,JobUpdate
+from fastapi import APIRouter,status,Depends
+from sqlalchemy.orm import Session
+from database import get_db
+from models.job import Job
+from schemas.job import JobCreate,JobUpdate,JobResponse
 
 
 router=APIRouter(prefix="/job",tags=["job"])
 jobs=[]
 
-@router.post("/")
-def create_jobs(job:JobCreate):
-    jobs.append(job)
+@router.post("/",status_code=status.HTTP_201_CREATED,response_model=JobResponse)
+def create_jobs(job:JobCreate,db:Session=Depends(get_db)):
+    jobs=db.query(Job).all()
     return jobs
 
 @router.get("/")
